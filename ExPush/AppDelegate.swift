@@ -31,6 +31,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tokenString = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         print(tokenString)
     }
+    
+    // 사일런트 푸시 처리 메소드
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        print("Receive silent push>", userInfo)
+        completionHandler(.newData)
+    }
 
     // MARK: UISceneSession Lifecycle
 
@@ -54,4 +60,10 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.sound, .badge, .banner])
     }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        UserDefaults.standard.set("start", forKey: "start")
+        print(response)
+    }
 }
+
