@@ -10,8 +10,6 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         // 1. 푸시 권한 요청
@@ -34,7 +32,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     // 사일런트 푸시 처리 메소드
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        print("Receive silent push>", userInfo)
+        
+        print("Receive silent push")
+        
         completionHandler(.newData)
     }
 
@@ -59,11 +59,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     // foreground에서 시스템 푸시를 수신했을 때 해당 메소드가 호출
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.sound, .badge, .banner])
-    }
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        UserDefaults.standard.set("start", forKey: "start")
-        print(response)
     }
 }
 
