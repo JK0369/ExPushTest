@@ -15,6 +15,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // 1. 푸시 권한 요청
         let center = UNUserNotificationCenter.current()
         center.delegate = self
+        
+        let doneAction = UNNotificationAction(identifier: "action.done", title: "Done")
+        let cancelAction = UNNotificationAction(identifier: "action.cancle", title: "Cancel")
+        let categories = UNNotificationCategory(
+            identifier: "myNotificationCategory",
+            actions: [doneAction, cancelAction],
+            intentIdentifiers: [],
+            options: .customDismissAction
+        )
+        center.setNotificationCategories([categories])
+        
         center.requestAuthorization(options: [.alert, .badge, .sound]) { granted, error in
             print(granted)
         }
@@ -59,6 +70,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     // foreground에서 시스템 푸시를 수신했을 때 해당 메소드가 호출
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.sound, .badge, .banner])
+    }
+    
+    // foreground, background에서 시스템 푸시를 탭하거나 dismiss했을때 해당 메소드가 호출
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        print(response.actionIdentifier)
     }
 }
 
