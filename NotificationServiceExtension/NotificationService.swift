@@ -6,6 +6,8 @@
 //
 
 import UserNotifications
+import Intents
+import UIKit
 
 class NotificationService: UNNotificationServiceExtension {
     
@@ -19,8 +21,16 @@ class NotificationService: UNNotificationServiceExtension {
         self.contentHandler = contentHandler
         bestAttemptContent = (request.content.mutableCopy() as? UNMutableNotificationContent)
         
-        guard let bestAttemptContent else { return }
+        // attachment에 이미지 넣기: https://ios-development.tistory.com/1282
+        // (아래 setAppIconToCustom 예제를 위해 잠시 주석 처리)
+//        setAttachment(request: request, contentHandler: contentHandler)
         
+        // 푸시 app icon 부분 커스텀 하기: https://ios-development.tistory.com/1283
+        setAppIconToCustom(request: request, contentHandler: contentHandler)
+    }
+    
+    private func setAttachment(request: UNNotificationRequest, contentHandler: @escaping (UNNotificationContent) -> Void) {
+        guard let bestAttemptContent else { return }
         bestAttemptContent.title = "변경 " + request.content.title
         bestAttemptContent.subtitle = "변경 " + request.content.subtitle
         
@@ -41,7 +51,69 @@ class NotificationService: UNNotificationServiceExtension {
         } catch {
             print(error)
         }
+    }
+    
+    private func setAppIconToCustom(request: UNNotificationRequest, contentHandler: @escaping (UNNotificationContent) -> Void) {
+        // Intent를 사용 전에는 info.plist에 키-값 추가 필요
+        // NSUserActivityTypes을 array로 놓고 배열 중 하나의 값으로 INSendMessageIntent 입력
+
+        let avatar = INImage(imageData: UIImage(named: "my_image.png")!.pngData()!)
         
+        let senderPerson = INPerson(
+            personHandle: INPersonHandle(value: "unique-sender-id-2", type: .unknown),
+            nameComponents: nil,
+            displayName: "Sender name",
+            image: avatar,
+            contactIdentifier: nil,
+            customIdentifier: nil,
+            isMe: false,
+            suggestionType: .none
+        )
+        
+        let mePerson = INPerson(
+            personHandle: INPersonHandle(value: "unique-me-id-2", type: .unknown),
+            nameComponents: nil,
+            displayName: nil,
+            image: nil,
+            contactIdentifier: nil,
+            customIdentifier: nil,
+            isMe: true,
+            suggestionType: .none
+        )
+        
+        // Intent
+        let intent = INSendMessageIntent(recipients: [mePerson],
+                                         outgoingMessageType: .outgoingMessageText,
+                                         content: "Message content",
+                                         speakableGroupName: nil,
+                                         conversationIdentifier: "unique-conversation-id-1",
+                                         serviceName: nil,
+                                         sender: senderPerson,
+                                         attachments: nil)
+        
+        //
+        intent.setImage(avatar, forParameterNamed: \.sender)
+//        intent.setImage(avatar, forParameterNamed: \.speakableGroupName) // 그룹
+        
+        // interaction
+        let interaction = INInteraction(intent: intent, response: nil)
+        interaction.direction = .incoming
+        
+        // 알림을 주기 전에 `donate`
+        interaction.donate { error in
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            do {
+                // 이전 notification에 intent를 더해주고, 노티 띄우기
+                let updatedContent = try request.content.updating(from: intent)
+                contentHandler(updatedContent)
+            } catch {
+                print(error)
+            }
+        }
     }
     
     // didReceive에서 contentHandler가 호출되지 않고 특정 시간이 경과하면 이 메소드가 호출

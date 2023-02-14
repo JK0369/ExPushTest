@@ -20,6 +20,7 @@
 		4AAB0F4A299A174D00B737DC /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB0F49299A174D00B737DC /* NotificationViewController.swift */; };
 		4AAB0F4D299A174D00B737DC /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4AAB0F4B299A174D00B737DC /* MainInterface.storyboard */; };
 		4AAB0F51299A174D00B737DC /* NotificationContentExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4AAB0F42299A174D00B737DC /* NotificationContentExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4AAB0F56299B4E8A00B737DC /* Media.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4AAB0F55299B4E8A00B737DC /* Media.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,7 @@
 		4AAB0F49299A174D00B737DC /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		4AAB0F4C299A174D00B737DC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		4AAB0F4E299A174D00B737DC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4AAB0F55299B4E8A00B737DC /* Media.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Media.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				4A3653112999073700CC01A9 /* NotificationService.swift */,
+				4AAB0F55299B4E8A00B737DC /* Media.xcassets */,
 				4A3653132999073700CC01A9 /* Info.plist */,
 			);
 			path = NotificationServiceExtension;
@@ -279,6 +282,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AAB0F56299B4E8A00B737DC /* Media.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
